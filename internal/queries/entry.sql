@@ -16,3 +16,10 @@ WHERE id = ?;
 -- name: DeleteEntry :exec
 DELETE FROM entry 
 WHERE id = ?;
+
+-- name: AddEntry :one
+INSERT INTO entry (
+    task_id
+) VALUES (
+    (SELECT id FROM current_task LIMIT 1)
+) returning *;

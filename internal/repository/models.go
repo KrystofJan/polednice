@@ -13,6 +13,11 @@ type CurrentEntry struct {
 	CurrentEntryID sql.NullInt64
 }
 
+type CurrentTask struct {
+	ID             int64
+	CurrentEntryID sql.NullInt64
+}
+
 type Entry struct {
 	ID             int64
 	TaskID         int64

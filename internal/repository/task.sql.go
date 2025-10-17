@@ -9,6 +9,28 @@ import (
 	"context"
 )
 
+const addTask = `-- name: AddTask :one
+INSERT INTO task (
+    name
+) VALUES (
+    ? 
+) returning id, name, start_timestamp, end_timestamp, finished, recorded_time
+`
+
+func (q *Queries) AddTask(ctx context.Context, name string) (Task, error) {
+	row := q.db.QueryRowContext(ctx, addTask, name)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.StartTimestamp,
+		&i.EndTimestamp,
+		&i.Finished,
+		&i.RecordedTime,
+	)
+	return i, err
+}
+
 const deleteTask = `-- name: DeleteTask :exec
 DELETE FROM task 
 WHERE id = ?
@@ -63,6 +85,27 @@ LIMIT 1
 
 func (q *Queries) FindTaskById(ctx context.Context, id int64) (Task, error) {
 	row := q.db.QueryRowContext(ctx, findTaskById, id)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.StartTimestamp,
+		&i.EndTimestamp,
+		&i.Finished,
+		&i.RecordedTime,
+	)
+	return i, err
+}
+
+const findTaskByName = `-- name: FindTaskByName :one
+SELECT id, name, start_timestamp, end_timestamp, finished, recorded_time 
+FROM task 
+WHERE name = ?
+LIMIT 1
+`
+
+func (q *Queries) FindTaskByName(ctx context.Context, name string) (Task, error) {
+	row := q.db.QueryRowContext(ctx, findTaskByName, name)
 	var i Task
 	err := row.Scan(
 		&i.ID,

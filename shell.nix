@@ -13,6 +13,13 @@ pkgs.mkShell {
     sqlite
     sqlc
 
+    (go-migrate.overrideAttrs
+      (oldAttrs: {
+        tags = ["sqlite3"];
+      }))
+
+    cobra-cli
+
     # nix stuff
     nixd
     (alejandra.packages.${system}.default)

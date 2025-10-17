@@ -9,6 +9,28 @@ import (
 	"context"
 )
 
+const addEntry = `-- name: AddEntry :one
+INSERT INTO entry (
+    task_id
+) VALUES (
+    (SELECT id FROM current_task LIMIT 1)
+) returning id, task_id, start_timestamp, end_timestamp, recorded_time, finished
+`
+
+func (q *Queries) AddEntry(ctx context.Context) (Entry, error) {
+	row := q.db.QueryRowContext(ctx, addEntry)
+	var i Entry
+	err := row.Scan(
+		&i.ID,
+		&i.TaskID,
+		&i.StartTimestamp,
+		&i.EndTimestamp,
+		&i.RecordedTime,
+		&i.Finished,
+	)
+	return i, err
+}
+
 const deleteEntry = `-- name: DeleteEntry :exec
 DELETE FROM entry 
 WHERE id = ?

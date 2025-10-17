@@ -49,7 +49,7 @@ BEGIN
 END;
 
 
-CREATE TRIGGER set_current_entry_on_inser
+CREATE TRIGGER set_current_entry_on_insert
 AFTER INSERT ON entry
 FOR EACH ROW
 BEGIN
@@ -68,7 +68,7 @@ BEGIN
     WHERE id = 1 AND current_entry_id = NEW.id;
 END;
 
-CREATE TRIGGER clear_current_entry_on_finish
+CREATE TRIGGER delete_entries_on_task_delete
 AFTER DELETE ON task
 FOR EACH ROW
 BEGIN
