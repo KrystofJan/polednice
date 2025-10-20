@@ -9,8 +9,8 @@ import (
 )
 
 type CurrentEntry struct {
-	ID             int64
-	CurrentEntryID sql.NullInt64
+	ID            int64
+	CurrentTaskID sql.NullInt64
 }
 
 type CurrentTask struct {
