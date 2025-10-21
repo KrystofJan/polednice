@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/KrystofJan/polednice/internal/constants"
+	"github.com/KrystofJan/tempus/internal/constants"
 )
 
 type Database struct {

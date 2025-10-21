@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/KrystofJan/polednice/internal/config"
+	"github.com/KrystofJan/tempus/internal/config"
 	"github.com/spf13/cobra"
 )
 

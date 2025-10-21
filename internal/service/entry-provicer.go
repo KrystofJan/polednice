@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/KrystofJan/polednice/internal/db"
-	"github.com/KrystofJan/polednice/internal/repository"
+	"github.com/KrystofJan/tempus/internal/db"
+	"github.com/KrystofJan/tempus/internal/repository"
 )
 
 func FindAllEntries() ([]repository.Entry, error) {

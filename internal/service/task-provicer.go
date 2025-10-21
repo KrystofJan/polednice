@@ -4,18 +4,30 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/KrystofJan/polednice/internal/db"
-	"github.com/KrystofJan/polednice/internal/repository"
+	"github.com/KrystofJan/tempus/internal/db"
+	"github.com/KrystofJan/tempus/internal/repository"
 )
 
-func FindAllTasks() ([]repository.Task, error) {
+type TaskProvider struct {
+	ctx  context.Context
+	repo *repository.Queries
+}
+
+func NewTaskProvider() (*TaskProvider, error) {
 	db, err := db.New()
 	if err != nil {
 		return nil, err
 	}
 	ctx := context.Background()
 	repo := repository.New(db.Instance)
-	entries, err := repo.FindAllTasks(ctx)
+	return &TaskProvider{
+		ctx:  ctx,
+		repo: repo,
+	}, nil
+}
+
+func (self *TaskProvider) FindAllTasks() ([]repository.Task, error) {
+	entries, err := self.repo.FindAllTasks(self.ctx)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot query the database: %v", err)
 	}
@@ -23,30 +35,31 @@ func FindAllTasks() ([]repository.Task, error) {
 
 }
 
-func FindTaskById(id int64) (repository.Task, error) {
-	db, err := db.New()
-	if err != nil {
-		return repository.Task{}, err
-	}
-	ctx := context.Background()
-	repo := repository.New(db.Instance)
-	tasks, err := repo.FindTaskById(ctx, id)
+func (self *TaskProvider) FindTaskById(id int64) (repository.Task, error) {
+	tasks, err := self.repo.FindTaskById(self.ctx, id)
 	if err != nil {
 		return repository.Task{}, fmt.Errorf("Cannot query the database: %v", err)
 	}
 	return tasks, nil
 }
 
-func FindTaskByName(name string) (repository.Task, error) {
+func (self *TaskProvider) FindTaskByName(name string) (repository.Task, error) {
 	db, err := db.New()
 	if err != nil {
 		return repository.Task{}, err
 	}
-	ctx := context.Background()
-	repo := repository.New(db.Instance)
-	tasks, err := repo.FindTaskByName(ctx, name)
+	defer db.Instance.Close()
+	tasks, err := self.repo.FindTaskByName(self.ctx, name)
 	if err != nil {
 		return repository.Task{}, fmt.Errorf("Cannot query the database: %v", err)
 	}
 	return tasks, nil
+}
+
+func (self *TaskProvider) AddTask(name string) (repository.Task, error) {
+	task, err := self.repo.AddTask(self.ctx, name)
+	if err != nil {
+		return repository.Task{}, err
+	}
+	return task, nil
 }

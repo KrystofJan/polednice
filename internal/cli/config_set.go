@@ -3,7 +3,8 @@ package cli
 import (
 	"fmt"
 
-	"github.com/KrystofJan/polednice/internal/config"
+	"github.com/KrystofJan/tempus/internal/config"
+	"github.com/KrystofJan/tempus/internal/handlers"
 	"github.com/spf13/cobra"
 )
 
@@ -17,15 +18,9 @@ var configSetCmd = &cobra.Command{
 		}
 
 		if generateNewConfig {
-			if err = config.Delete(); err != nil {
-				return err
+			if err = handlers.GenerateConfig(); err != nil {
+				return nil
 			}
-			conf, err := config.New()
-			if err != nil {
-				return err
-			}
-			fmt.Print(conf)
-			return nil
 		}
 
 		defaultTask, err := cmd.Flags().GetString("defaultTask")

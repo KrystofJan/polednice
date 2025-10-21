@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/KrystofJan/polednice/internal/cli"
+	"github.com/KrystofJan/tempus/internal/cli"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/KrystofJan/polednice
+module github.com/KrystofJan/tempus
 
 go 1.25.0
 

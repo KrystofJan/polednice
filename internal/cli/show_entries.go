@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/KrystofJan/polednice/internal/service"
+	"github.com/KrystofJan/tempus/internal/service"
 	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/mattn/go-sqlite3"
@@ -19,6 +19,11 @@ var showEntryCmd = &cobra.Command{
 		all, err := cmd.Flags().GetBool("all")
 		if err != nil {
 			return fmt.Errorf("PARAMETER ERROR: %v", err)
+		}
+
+		taskProvider, err := service.NewTaskProvider()
+		if err != nil {
+			return err
 		}
 
 		if all {
@@ -37,7 +42,7 @@ var showEntryCmd = &cobra.Command{
 		}
 
 		log.Printf("Looking for %d entry", id)
-		tasks, err := service.FindTaskById(id)
+		tasks, err := taskProvider.FindTaskById(id)
 		if err != nil {
 			return fmt.Errorf("SERVICE ERROR: %v", err)
 		}

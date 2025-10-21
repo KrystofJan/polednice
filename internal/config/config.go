@@ -6,9 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/KrystofJan/polednice/internal/constants"
-	"github.com/KrystofJan/polednice/internal/errors"
-	"github.com/KrystofJan/polednice/internal/utils"
+	"github.com/KrystofJan/tempus/internal/constants"
+	"github.com/KrystofJan/tempus/internal/errors"
+	"github.com/KrystofJan/tempus/internal/utils"
 )
 
 // NOTE: Get config -> set default task, etc.
@@ -41,7 +41,7 @@ func New() (*Config, error) {
 	_, error := os.Stat(path)
 
 	if !os.IsNotExist(error) {
-		return nil, errors.New("Config file already exists, please delete it first", errors.NewConfigConflict, error)
+		fmt.Printf("Config file does not exist, creating a new one")
 	}
 	config := &Config{
 		DefaultTask: constants.GENERATED_DEFAULT_TASK_NAME,
@@ -53,7 +53,7 @@ func New() (*Config, error) {
 	return config, nil
 }
 
-func Get() (*Config, error) {
+func Get() (*Config, *errors.ConfigError) {
 	path, err := utils.GetPath(constants.CONFIG_FOLDER_PATH, constants.CONFIG_FILE_NAME)
 	if err != nil {
 		return nil, errors.New("Config file not valid", errors.ConfigPath, err)
@@ -97,7 +97,7 @@ func Delete() error {
 	_, error := os.Stat(path)
 
 	if os.IsNotExist(error) {
-		fmt.Print("Config file does not exists, won't delete")
+		fmt.Print("Config file does not exists, won't delete\n")
 		return nil
 	}
 	if err = os.Remove(path); err != nil {
