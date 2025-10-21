@@ -1,10 +1,10 @@
-# Polednice
+# Tempus
 
 ```
-polednice start
-polednice show <task>
-polednice switch <task>
-polednice move <entry> <task>
-polednice end
+tempus start
+tempus show <task>
+tempus switch <task>
+tempus move <entry> <task>
+tempus end
 ```
 
