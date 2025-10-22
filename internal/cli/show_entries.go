@@ -21,14 +21,14 @@ var showEntryCmd = &cobra.Command{
 			return fmt.Errorf("PARAMETER ERROR: %v", err)
 		}
 
-		taskProvider, err := service.NewTaskProvider()
+		entryProvider, err := service.NewEntryProvider()
 		if err != nil {
 			return err
 		}
 
 		if all {
 			log.Println("Looking for all entries")
-			tasks, err := service.FindAllEntries()
+			tasks, err := entryProvider.FindAllEntries()
 			if err != nil {
 				return fmt.Errorf("SERVICE ERROR: %v", err)
 			}
@@ -42,7 +42,7 @@ var showEntryCmd = &cobra.Command{
 		}
 
 		log.Printf("Looking for %d entry", id)
-		tasks, err := taskProvider.FindTaskById(id)
+		tasks, err := entryProvider.FindEntryById(id)
 		if err != nil {
 			return fmt.Errorf("SERVICE ERROR: %v", err)
 		}

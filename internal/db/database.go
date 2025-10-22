@@ -15,7 +15,7 @@ type Database struct {
 	Instance *sql.DB
 }
 
-func New() (*Database, error) {
+func NewDatabase() (*Database, error) {
 	dbPath, err := getDBPath()
 	if err != nil {
 		return nil, err

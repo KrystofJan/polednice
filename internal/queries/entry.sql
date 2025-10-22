@@ -21,5 +21,13 @@ WHERE id = ?;
 INSERT INTO entry (
     task_id
 ) VALUES (
-    (SELECT id FROM current_task LIMIT 1)
+    ?
 ) returning *;
+
+-- name: ClearEntries :exec
+DELETE FROM entry;
+
+-- name: CalculateTaskTime :one
+SELECT SUM(end_timestamp - start_timestamp) 
+FROM entry 
+WHERE task_id = ?;

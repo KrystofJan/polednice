@@ -29,3 +29,6 @@ INSERT INTO task (
 ) VALUES (
     ? 
 ) returning *;
+
+-- name: ClearTasks :exec
+DELETE FROM task;

@@ -32,7 +32,7 @@ func (config *Config) Save() (*Config, error) {
 	return config, nil
 }
 
-func New() (*Config, error) {
+func New() (*Config, *errors.ConfigError) {
 	path, err := utils.GetPath(constants.CONFIG_FOLDER_PATH, constants.CONFIG_FILE_NAME)
 	if err != nil {
 		return nil, errors.New("Config file not valid", errors.ConfigPath, err)

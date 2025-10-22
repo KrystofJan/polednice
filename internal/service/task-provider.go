@@ -14,7 +14,7 @@ type TaskProvider struct {
 }
 
 func NewTaskProvider() (*TaskProvider, error) {
-	db, err := db.New()
+	db, err := db.NewDatabase()
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (self *TaskProvider) FindTaskById(id int64) (repository.Task, error) {
 }
 
 func (self *TaskProvider) FindTaskByName(name string) (repository.Task, error) {
-	db, err := db.New()
+	db, err := db.NewDatabase()
 	if err != nil {
 		return repository.Task{}, err
 	}
@@ -62,4 +62,11 @@ func (self *TaskProvider) AddTask(name string) (repository.Task, error) {
 		return repository.Task{}, err
 	}
 	return task, nil
+}
+
+func (self *TaskProvider) ClearTasks() error {
+	if err := self.repo.ClearTasks(self.ctx); err != nil {
+		return err
+	}
+	return nil
 }

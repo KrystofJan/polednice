@@ -9,17 +9,15 @@ import (
 	"context"
 )
 
-const switchCurrentTask = `-- name: SwitchCurrentTask :one
-INSERT INTO current_task (
-    task_id
-) VALUES (
-    (SELECT id FROM current_task LIMIT 1)
-) returning id, current_entry_id
+const getCurrentTask = `-- name: GetCurrentTask :one
+SELECT id, current_task_id
+FROM current_task
+LIMIT 1
 `
 
-func (q *Queries) SwitchCurrentTask(ctx context.Context) (CurrentTask, error) {
-	row := q.db.QueryRowContext(ctx, switchCurrentTask)
+func (q *Queries) GetCurrentTask(ctx context.Context) (CurrentTask, error) {
+	row := q.db.QueryRowContext(ctx, getCurrentTask)
 	var i CurrentTask
-	err := row.Scan(&i.ID, &i.CurrentEntryID)
+	err := row.Scan(&i.ID, &i.CurrentTaskID)
 	return i, err
 }

@@ -17,7 +17,7 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	// NOTE: Need to ensure that the database is there
-	if _, err := db.New(); err != nil {
+	if _, err := db.NewDatabase(); err != nil {
 		log.Fatalf("There was a problem creating the database instance: %v", err)
 		os.Exit(1)
 	}
@@ -26,7 +26,8 @@ func Execute() {
 		os.Exit(1)
 	}
 
-	if err := handlers.EnsureDefaultTaskExists(); err != nil {
+	_, err := handlers.EnsureDefaultTaskExists()
+	if err != nil {
 		log.Fatalf("Error when ensuring the existance of default task: %v", err)
 		os.Exit(1)
 	}

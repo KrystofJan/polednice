@@ -7,18 +7,19 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 )
 
 const addEntry = `-- name: AddEntry :one
 INSERT INTO entry (
     task_id
 ) VALUES (
-    (SELECT id FROM current_task LIMIT 1)
+    ?
 ) returning id, task_id, start_timestamp, end_timestamp, recorded_time, finished
 `
 
-func (q *Queries) AddEntry(ctx context.Context) (Entry, error) {
-	row := q.db.QueryRowContext(ctx, addEntry)
+func (q *Queries) AddEntry(ctx context.Context, taskID int64) (Entry, error) {
+	row := q.db.QueryRowContext(ctx, addEntry, taskID)
 	var i Entry
 	err := row.Scan(
 		&i.ID,
@@ -29,6 +30,28 @@ func (q *Queries) AddEntry(ctx context.Context) (Entry, error) {
 		&i.Finished,
 	)
 	return i, err
+}
+
+const calculateTaskTime = `-- name: CalculateTaskTime :one
+SELECT SUM(end_timestamp - start_timestamp) 
+FROM entry 
+WHERE task_id = ?
+`
+
+func (q *Queries) CalculateTaskTime(ctx context.Context, taskID int64) (sql.NullFloat64, error) {
+	row := q.db.QueryRowContext(ctx, calculateTaskTime, taskID)
+	var sum sql.NullFloat64
+	err := row.Scan(&sum)
+	return sum, err
+}
+
+const clearEntries = `-- name: ClearEntries :exec
+DELETE FROM entry
+`
+
+func (q *Queries) ClearEntries(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, clearEntries)
+	return err
 }
 
 const deleteEntry = `-- name: DeleteEntry :exec
